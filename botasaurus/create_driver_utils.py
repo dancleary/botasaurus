@@ -120,6 +120,9 @@ def hide_automation_bar(options):
 def is_gitpod_environment():
     return 'GITPOD_WORKSPACE_ID' in os.environ
 
+def is_heroku():
+    return "DYNO" in os.environ and not "CI" in os.environ
+
 def is_docker():
     path = '/proc/self/cgroup'
 
@@ -253,6 +256,12 @@ def create_options_and_driver_attributes_and_close_proxy(tiny_profile, profile, 
             options.add_argument('--no-sandbox')
             options.add_argument('--headless=new')
             # options.add_argument('--disable-setuid-sandbox')
+        elif is_heroku():
+            print("HEROKU DETECTED SETTING SELENIUM OPTIONS!!!")
+            options.add_argument("--headless")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--no-sandbox")
+            options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         else:
             if headless:
                 options.add_argument('--headless=new')
