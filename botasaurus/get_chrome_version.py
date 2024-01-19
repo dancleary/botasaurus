@@ -371,6 +371,7 @@ def get_filename(major_version):
     return f"chromedriver-{major_version}.exe" if is_windows() else f"chromedriver-{major_version}"
 
 def get_driver_path():
+    IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ 
     executable_name = get_filename(_get_major_version())
     dest_path = f"build/{executable_name}"
-    return dest_path
+    return ".chromedriver/bin/chromedriver" if IS_HEROKU_APP else dest_path

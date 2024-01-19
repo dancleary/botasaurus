@@ -263,8 +263,9 @@ def write_json(data, path,  indent=4):
 
 
 def get_driver_path():
+    IS_HEROKU_APP = "DYNO" in os.environ and not "CI" in os.environ
     executable_name = "chromedriver.exe" if is_windows() else "chromedriver"
-    dest_path = f"build/{executable_name}"
+    dest_path = f".chromedriver/bin/{executable_name}" if IS_HEROKU_APP else f"build/{executable_name}"
     return dest_path
 
 
